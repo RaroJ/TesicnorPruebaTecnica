@@ -1,5 +1,7 @@
 package com.harrypotterapp.tesicnorpruebatecnica;
 
+import com.harrypotterapp.tesicnorpruebatecnica.DB.HPMovie;
+import com.harrypotterapp.tesicnorpruebatecnica.DB.HPMovieImplementation;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,8 +17,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.controlsfx.control.Rating;
-
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -52,7 +56,19 @@ public class HarryPotterMDBController implements Initializable {
     String currentMovie;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        movieList.getItems().addAll(movies);
+
+        List<String> titleList = new ArrayList<>();
+
+        List<HPMovie> initialMovieList;
+        try {
+            initialMovieList = movieDBFetch();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        for (HPMovie movie : initialMovieList) {
+                titleList.add(movie.getTitle());
+        }
+        movieList.getItems().addAll(titleList);
 
         //Movie Selection Listener
         movieList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -80,7 +96,7 @@ public class HarryPotterMDBController implements Initializable {
                 updateTag.setVisible(true);
                 userRating.setDisable(true);
                 movieList.setMouseTransparent(true);
-                int updatedRating = (int)userRating.getRating();
+                int updatedRating = (int) userRating.getRating();
                 ratingTag.setText("User Rating: " + updatedRating + " / 5");
                 PauseTransition espera = new PauseTransition(Duration.seconds(2));
                 espera.setOnFinished(e -> updateSuccess());
@@ -94,5 +110,10 @@ public class HarryPotterMDBController implements Initializable {
         userRating.setDisable(false);
         updateTag.setVisible(false);
         updateButton.setVisible(false);
+    }
+
+    public List<HPMovie> movieDBFetch () throws SQLException {
+        HPMovieImplementation movieDao = new HPMovieImplementation();
+        return movieDao.getMovies();
     }
 }
