@@ -12,15 +12,16 @@ public class HPMovieImplementation implements HPMovieDAO{
     @Override
     public int add(HPMovie movie) throws SQLException {
         String query
-                = "insert into harrypottermovies(IMDBID, Title, Year, ImgUrl,"
-                + "userRating) VALUES (?, ?, ?, ?, ?)";
+                = "insert into harrypottermovies(IMDBID, Title, Year, ImgUrl, userRating,"
+                + "plot) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps
                 = con.prepareStatement(query);
         ps.setString(1, movie.getID());
         ps.setString(2, movie.getTitle());
         ps.setInt(3, movie.getYear());
         ps.setString(4, movie.getImgUrl());
-        ps.setInt(5, movie.getYear());
+        ps.setInt(5, movie.getUserRating());
+        ps.setString(6, movie.getSinopsis());
 
         int n = ps.executeUpdate();
         return n;
@@ -53,6 +54,7 @@ public class HPMovieImplementation implements HPMovieDAO{
             movie.setYear(rs.getInt("Year"));
             movie.setImgUrl(rs.getString("ImgUrl"));
             movie.setUserRating(rs.getInt("userRating"));
+            movie.setSinopsis(rs.getString("plot"));
         }
         if (check) {
             return movie;
@@ -76,6 +78,7 @@ public class HPMovieImplementation implements HPMovieDAO{
             movie.setYear(rs.getInt("Year"));
             movie.setImgUrl(rs.getString("ImgUrl"));
             movie.setUserRating(rs.getInt("userRating"));
+            movie.setSinopsis(rs.getString("plot"));
             ls.add(movie);
         }
         return ls;
@@ -84,15 +87,16 @@ public class HPMovieImplementation implements HPMovieDAO{
     @Override
     public void update(HPMovie movie) throws SQLException {
         String query
-                = "update harrypottermovies set Title=?, Year=?, ImgUrl=?, "
-                + " userRating= ? where IMDBID = ?";
+                = "update harrypottermovies set Title=?, Year=?, ImgUrl=?, userRating=?, "
+                + " plot= ? where IMDBID = ?";
         PreparedStatement ps
                 = con.prepareStatement(query);
         ps.setString(1, movie.getTitle());
         ps.setInt(2, movie.getYear());
         ps.setString(3, movie.getImgUrl());
         ps.setInt(4, movie.getUserRating());
-        ps.setString(5, movie.getID());
+        ps.setString(5, movie.getSinopsis());
+        ps.setString(6, movie.getID());
         ps.executeUpdate();
     }
 }

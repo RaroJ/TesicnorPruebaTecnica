@@ -6,20 +6,23 @@ public class HPMovie {
     int Year;
     String imgUrl;
     int userRating;
+    String sinopsis;
 
-    public HPMovie(String ID, String title, int year, String imgUrl, int userRating) {
+    public HPMovie(String ID, String title, int year, String imgUrl, int userRating, String sinopsis) {
         this.ID = ID;
         Title = title;
         Year = year;
         this.imgUrl = imgUrl;
         this.userRating = userRating;
+        this.sinopsis = sinopsis;
     }
-    public HPMovie(String ID, String title, int year, String imgUrl) {
+    public HPMovie(String ID, String title, int year, String imgUrl,String sinopsis) {
         this.ID = ID;
         Title = title;
         Year = year;
         this.imgUrl = imgUrl;
         this.userRating = 0;
+        this.sinopsis = sinopsis;
     }
 
     public HPMovie() {
@@ -63,6 +66,14 @@ public class HPMovie {
 
     public void setUserRating(int userRating) {
         this.userRating = userRating;
+    }
+
+    public String getSinopsis() {
+        return sinopsis;
+    }
+
+    public void setSinopsis(String sinopsis) {
+        this.sinopsis = sinopsis;
     }
 
     @Override
