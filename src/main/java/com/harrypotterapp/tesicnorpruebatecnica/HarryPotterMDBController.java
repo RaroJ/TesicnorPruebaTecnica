@@ -2,6 +2,7 @@ package com.harrypotterapp.tesicnorpruebatecnica;
 
 import com.harrypotterapp.tesicnorpruebatecnica.DB.HPMovie;
 import com.harrypotterapp.tesicnorpruebatecnica.DB.HPMovieImplementation;
+import com.harrypotterapp.tesicnorpruebatecnica.DB.OMDBAPICall;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,15 +14,23 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.controlsfx.control.Rating;
+import javafx.embed.swing.SwingFXUtils;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
 
 
 public class HarryPotterMDBController implements Initializable {
@@ -52,20 +61,32 @@ public class HarryPotterMDBController implements Initializable {
     @FXML
     private Label updateTag;
 
-    String[] movies = {"Harry Potter 1", "Harry Potter 2", "Harry Potter 3"};
     String currentMovie;
+    Image image = null;
+    HPMovieImplementation movieDao = new HPMovieImplementation();
+    List<HPMovie> dbMovieList;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        //APICall and upload to the database
+        List <HPMovie> APIList = OMDBAPICall.apiCall();
+        for (HPMovie movie : APIList) {
+            try {
+                if (movieDao.getMovie(movie.getID()) == null) {
+                    movieDao.add(movie);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //Database Fetch
         List<String> titleList = new ArrayList<>();
 
-        List<HPMovie> initialMovieList;
         try {
-            initialMovieList = movieDBFetch();
+            dbMovieList = movieDBFetch(movieDao);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        for (HPMovie movie : initialMovieList) {
+        for (HPMovie movie : dbMovieList) {
                 titleList.add(movie.getTitle());
         }
         movieList.getItems().addAll(titleList);
@@ -76,16 +97,45 @@ public class HarryPotterMDBController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 //Load Movie Data
                 currentMovie = movieList.getSelectionModel().getSelectedItem();
-                title.setText(currentMovie);
+                for (HPMovie movie : dbMovieList) {
+                    if (movie.getTitle().equals(currentMovie)) {
+                        title.setText(currentMovie);
+                        URL imageUrl;
+                        try {
+                           imageUrl = new URL(movie.getImgUrl());
+                        } catch (MalformedURLException e) {
+                            throw new RuntimeException(e);
+                        }
+                        BufferedImage poster;
+                        try {
+                            poster = ImageIO.read(imageUrl);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        image = SwingFXUtils.toFXImage(poster, null);
+                        moviePoster.setImage(image);
+                        yearTag.setText("Year of release: "+movie.getYear());
+                        textSynopsis.setText(movie.getSinopsis());
+                        id.setText("IMDB ID: "+movie.getID());
+                        ratingTag.setText("User Rating: " + movie.getUserRating() + " / 5");
+                        userRating.setRating(movie.getUserRating());
+                    }
+                }
+
+                try {
+                    dbMovieList = movieDBFetch(movieDao);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
             }
 
         });
         movieList.getSelectionModel().select(0);
         //Rating Selection Listener
-        userRating.ratingProperty().addListener(new ChangeListener<Number>() {
+        userRating.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+            public void handle(MouseEvent mouseEvent) {
                 updateButton.setVisible(true);
             }
         });
@@ -97,6 +147,13 @@ public class HarryPotterMDBController implements Initializable {
                 userRating.setDisable(true);
                 movieList.setMouseTransparent(true);
                 int updatedRating = (int) userRating.getRating();
+                String auxIDFull = id.getText();
+                String auxID = auxIDFull.substring(9);
+                try {
+                    movieDao.updateRating(auxID,updatedRating);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 ratingTag.setText("User Rating: " + updatedRating + " / 5");
                 PauseTransition espera = new PauseTransition(Duration.seconds(2));
                 espera.setOnFinished(e -> updateSuccess());
@@ -112,8 +169,7 @@ public class HarryPotterMDBController implements Initializable {
         updateButton.setVisible(false);
     }
 
-    public List<HPMovie> movieDBFetch () throws SQLException {
-        HPMovieImplementation movieDao = new HPMovieImplementation();
+    public List<HPMovie> movieDBFetch (HPMovieImplementation movieDao) throws SQLException {
         return movieDao.getMovies();
     }
 }

@@ -99,4 +99,13 @@ public class HPMovieImplementation implements HPMovieDAO{
         ps.setString(6, movie.getID());
         ps.executeUpdate();
     }
+    public void updateRating(String id, int rating) throws SQLException {
+        String query
+                = "update harrypottermovies set userRating=? where IMDBID = ?";
+        PreparedStatement ps
+                = con.prepareStatement(query);
+        ps.setInt(1, rating);
+        ps.setString(2, id);
+        ps.executeUpdate();
+    }
 }

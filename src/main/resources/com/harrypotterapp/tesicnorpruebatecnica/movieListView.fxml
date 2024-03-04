@@ -14,7 +14,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="382.0" prefWidth="694.0" style="-fx-background-color: #171821;" stylesheets="@additionalStyles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.harrypotterapp.tesicnorpruebatecnica.HarryPotterMDBController">
   <children>
-    <ListView fx:id="movieList" editable="true" layoutX="25.0" layoutY="41.0" prefHeight="301.0" prefWidth="234.0" style="-fx-background-color: #242636;" />
+    <ListView fx:id="movieList" editable="true" layoutX="25.0" layoutY="41.0" prefHeight="301.0" prefWidth="261.0" style="-fx-background-color: #242636;" />
     <Label layoutX="25.0" layoutY="14.0" prefHeight="17.0" prefWidth="78.0" text="Movies" textFill="#818dae">
       <font>
         <Font size="18.0" />

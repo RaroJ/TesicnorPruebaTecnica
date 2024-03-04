@@ -10,3 +10,30 @@
     -fx-background-color: #818dae;
     -fx-text-fill: #242636;
 }
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:#242636;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color:  #242636;
+    -fx-border-color:  #242636;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color:  #818dae;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color:  transparent;
+}
+.scroll-bar > .increment-button > .increment-arrow,
+.scroll-bar > .decrement-button > .decrement-arrow {
+    -fx-background-color: #818dae;
+}
