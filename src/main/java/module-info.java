@@ -8,6 +8,7 @@ module com.harrypotterapp.tesicnorpruebatecnica {
     requires com.dlsc.formsfx;
     requires org.kordamp.ikonli.javafx;
     requires mysql.connector.j;
+    requires com.google.gson;
 
     opens com.harrypotterapp.tesicnorpruebatecnica to javafx.fxml;
     exports com.harrypotterapp.tesicnorpruebatecnica;
