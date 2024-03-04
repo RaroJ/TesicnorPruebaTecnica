@@ -16,12 +16,16 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.controlsfx.control.Rating;
 import javafx.embed.swing.SwingFXUtils;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -60,6 +64,8 @@ public class HarryPotterMDBController implements Initializable {
     private Button updateButton;
     @FXML
     private Label updateTag;
+    @FXML
+    private TextField searchbox;
 
     String currentMovie;
     Image image = null;
@@ -90,6 +96,33 @@ public class HarryPotterMDBController implements Initializable {
                 titleList.add(movie.getTitle());
         }
         movieList.getItems().addAll(titleList);
+
+        //Búsqueda
+        /*
+        searchbox.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent ke) {
+            }
+        });
+         */
+        searchbox.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                //if (ke.getCode().equals(KeyCode.ENTER)) {
+                String search = searchbox.getText();
+                movieList.getItems().clear();
+                List<String> newList = new ArrayList<>();
+                for (String title : titleList) {
+                    if (title.toLowerCase().contains(search.toLowerCase())) {
+                        newList.add(title);
+                    }
+                }
+
+                movieList.getItems().addAll(newList);
+                movieList.getSelectionModel().select(title.getText());
+                //}
+            }
+        });
 
         //Movie Selection Listener
         movieList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {

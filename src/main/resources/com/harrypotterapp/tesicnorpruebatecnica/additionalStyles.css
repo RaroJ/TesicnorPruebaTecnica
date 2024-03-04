@@ -37,3 +37,6 @@
 .scroll-bar > .decrement-button > .decrement-arrow {
     -fx-background-color: #818dae;
 }
+.text-input {
+    -fx-text-fill: white;
+}
