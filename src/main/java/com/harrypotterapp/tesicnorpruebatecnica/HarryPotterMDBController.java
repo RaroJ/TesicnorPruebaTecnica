@@ -121,7 +121,7 @@ public class HarryPotterMDBController implements Initializable {
                         userRating.setRating(movie.getUserRating());
                     }
                 }
-
+                updateButton.setVisible(false);
                 try {
                     dbMovieList = movieDBFetch(movieDao);
                 } catch (SQLException e) {
