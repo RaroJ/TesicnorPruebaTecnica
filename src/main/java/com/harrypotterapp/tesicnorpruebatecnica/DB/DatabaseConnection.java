@@ -13,7 +13,7 @@ public class DatabaseConnection {
 
     static
     {
-
+        //Config
         Properties prop = new Properties();
         String fileName = "src/main/java/com/harrypotterapp/tesicnorpruebatecnica/DB/db.config";
         try (FileInputStream fis = new FileInputStream(fileName)) {
