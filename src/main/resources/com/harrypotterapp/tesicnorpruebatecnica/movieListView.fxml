@@ -64,6 +64,6 @@
     <Label fx:id="copyright" layoutX="553.0" layoutY="351.0" text="José Ramírez Haro 2024" />
       <Button fx:id="updateButton" layoutX="520.0" layoutY="283.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="127.0" style="-fx-background-color: #242636; -fx-border-color: #818dae; -fx-background-radius: 5px; -fx-border-radius: 5px;" text="Update rating" textFill="#818dae" visible="false" />
       <Label fx:id="updateTag" layoutX="541.0" layoutY="259.0" text="Rating updated!" textFill="#818dae" visible="false" />
-      <TextField fx:id="searchbox" layoutX="137.0" layoutY="12.0" prefHeight="7.0" prefWidth="149.0" promptText="Buscar" style="-fx-background-color: #242636; -fx-text-fill: #818dae; -fx-prompt-text-fill: #818dae;" />
+      <TextField fx:id="searchbox" layoutX="137.0" layoutY="12.0" prefHeight="7.0" prefWidth="149.0" promptText="Search" style="-fx-background-color: #242636; -fx-text-fill: #818dae; -fx-prompt-text-fill: #818dae;" />
   </children>
 </Pane>
